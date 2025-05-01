@@ -1,0 +1,65 @@
+---
+title: "Untitled"
+format: html
+editor: visual
+---
+
+data
+
+1.  which street has the most transit routes
+
+2.  How long is the longest street segment and the data\
+
+```{r}
+library(tidyverse)
+seattle <- read_csv("seattle.csv")
+
+#histogram
+seattle |>
+  ggplot(aes(x = sgmnt_d)) +
+  geom_histogram()
+
+#boxplot
+seattle |>
+  ggplot(aes(y = TOTAL)) +
+  geom_boxplot()
+
+#scatterplot 
+seattle |>
+  ggplot(aes(y = TOTAL, x = sgmnt_d)) +
+  geom_point()
+
+
+```
+
+```{r}
+#mean, sd, min, max
+seattle |>
+  group_by(FTV_pdt) |>
+  summarise(
+    mean_total = mean(TOTAL, na.rm = TRUE),
+    sd_total = sd(TOTAL, na.rm = TRUE),
+    min_total = min(TOTAL, na.rm = TRUE),
+    max_total = max(TOTAL, na.rm = TRUE)
+  )
+ 
+
+
+```
+
+```{r}
+model <- aov(TOTAL ~ sgmnt_d, data = seattle)
+summary(model)
+
+seattle |>
+  ggplot(aes(x = sgmnt_d, y = TOTAL)) +
+  geom_boxplot() +
+  labs(title = "TOTAL by Segment (sgmnt_d)", x = "Segment", y = "Total")
+
+```
+
+Conclusion:
+
+While doing our project we conclude that seattle street data was studied to understand the relationship of different street segments with total values (for example, traffic or usage). Histograms and boxplots were constructed to understand the spread of the data. In a scatterplot, street type(sgmnt_d) and the total variable were plotted against each other to check for any kind of relationship. Then the records were grouped by an additional variable called FTV_pdt, and the means, maxima, minima, and standard deviation (that indicates how spread out the numbers are) of TOTAL in each group were calculated.
+
+The next thing we did was to apply a test called ANOVA to check whether or not the differences among the various segment types in TOTAL are really important or just a matter of chance. A significant difference was found; hence, it can be concluded that the type of street segment affects the total. Another boxplot was made to help in the comparison. From this analysis, it becomes clear that totals differ in magnitude among different street types, some considerably more than others. This is a further step in helping us understand the varied uses of streets in Seattle depending on their classification.
